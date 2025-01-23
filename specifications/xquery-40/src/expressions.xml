@@ -20257,8 +20257,8 @@ declare function recursive-content($item as item()) as record(key, value)* {
                   deep in the tree.</p>
                </note>
                <note>
-                  <p>The result of the deep lookup operator retains order when processing sequences and
-                  arrays, but not when processing maps.</p>
+                  <p>The result of the deep lookup operator retains order when processing sequences,
+                  arrays, and maps.</p>
                </note>
                <note>
                   <p>An expression involving multiple deep lookup operators may return duplicates.
