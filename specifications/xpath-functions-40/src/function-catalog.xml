@@ -37373,8 +37373,8 @@ return $result
    
    <fos:function name="jtree" prefix="fn">
       <fos:signatures>
-         <fos:proto name="jtree" return-type="jnode((), (map(*)|array(*)))">
-            <fos:arg name="input" type="(map(*)|array(*))"/>
+         <fos:proto name="jtree" return-type="jnode(())">
+            <fos:arg name="input" type="item()*"/>
          </fos:proto>
       </fos:signatures>
       <fos:properties>
@@ -37384,18 +37384,21 @@ return $result
       </fos:properties>
       <fos:summary>
          <p>Delivers a root <xtermref spec="DM40" ref="dt-JNode"/> wrapping 
-            a map or array, enabling the use of lookup expression
+            a supplied value; if the supplied value is a map or array this enables the use of lookup expression
             to navigate a <xtermref spec="DM40" ref="dt-JTree"/> rooted at that map or array.</p>
       </fos:summary>
       <fos:rules>
          <p>The function returns a <xtermref spec="DM40" ref="dt-JNode"/>
-            that wraps the supplied map or array. Specifically, it returns a root JNode
+            that wraps the supplied <code>$input</code> value. Specifically, it returns a root JNode
             whose <term>·jvalue·</term> property is <code>$input</code>, and whose
             <term>·jparent·</term>, <term>·jposition·</term>, and <term>·jkey·</term> 
             properties are absent.</p>
          
          <p>The returned JNode acts as the root of a tree, from which further JNodes
-            may be reached by navigation using axis steps: see <xspecref spec="XP40" ref="id-axis-steps"/>.</p>
+            may be reached by navigation using axis steps: see <xspecref spec="XP40" ref="id-axis-steps"/>
+            Most commonly, the supplied <code>$input</code> will be a map or an array, in which
+            case the <code>child</code> axis can be used to select the entries in the map or the
+            members in the array.</p>
          
          <p>The function typically returns a new JNode with its own identity. However,
             if the function is called repeatedly with the same map or array as input,
@@ -37437,12 +37440,12 @@ return $result
             within a single tree is unambiguously defined.</p>
          
          
-         <p>The coercion rules ensure that if an existing JNode is supplied as <code>$input</code>,
+         <!--<p>The coercion rules ensure that if an existing JNode is supplied as <code>$input</code>,
          the wrapped value will be extracted, and then rewrapped as a root JNode. If the supplied
          JNode is the root of a JTree, then it can be returned unchanged; in other cases the result
          must differ from the supplied JNode, in that it must be the root of a new JTree, with
          absent <term>·jparent·</term>, <term>·jposition·</term>, and <term>·jkey·</term> properties.</p>
-         
+         -->
          <p>Although <function>fn:jtree</function> is available as a function for user applications
          to call explicitly, it is also invoked implicitly by some expressions, notably when
          a path expression is written in a form such as <code>$map/child::*</code>. Specifically,
@@ -37472,6 +37475,13 @@ return $result
          
          <p>An alternative way of wrapping a map or array, rather than calling <code>jtree($X)</code>,
          is to use the path expression <code>$X/.</code>.</p>
+         
+         <p>It is possible to use the <function>jtree</function> function to wrap values other than
+         maps or arrays. One use case for this is when constructing input to the <function>array:of-members</function>
+         function (or in XSLT, the <code>xsl:array</code> instruction). Both these constructs take as input a sequence
+         of JNodes, and each JNode in the input is unwrapped to create one member of the new array.</p>
+         
+         <ednote><edtext>Assuming PR2814 is accepted.</edtext></ednote>
          
          
          
@@ -37509,6 +37519,16 @@ return $result
 }
 return jtree($data)//languages[. = 'German']/../capital =!> string()</eg></fos:expression>
                <fos:result>"Berlin"</fos:result>
+            </fos:test>
+         </fos:example>
+         <fos:example>
+            <fos:test>
+               <fos:expression><eg>let $data := {
+  "fr": { "capital": "Paris", "language": "French" }, 
+  "de": { "capital": "Berlin", "languages": "German" }
+}
+return array:of-members($data/* ! jtree((jkey(.), jvalue(./capital), jvalue(./language)))</eg></fos:expression>
+               <fos:result>[("fr", "Paris", "French"), ("de", "Berlin", "German")]</fos:result>
             </fos:test>
          </fos:example>
          
