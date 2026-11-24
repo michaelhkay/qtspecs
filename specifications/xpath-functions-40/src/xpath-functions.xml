@@ -1182,7 +1182,7 @@ This includes all the built-in datatypes defined in <bibref ref="xmlschema-2"/>.
                   <item><p><code>deep-equal("x" -> string-length#0, "y" -> string-length#0)</code></p></item>
                   <item><p><code>deep-equal(let $n := 1 return fn{$n + 1}, let $m := 1 return fn{$m + 1})</code></p></item>
                   <item><p><code>deep-equal(count#1, function-lookup(#fn:count, 1))</code></p></item>
-                  <item><p><code>deep-equal(ceiling#1, round(?, 0, "ceiling")</code></p></item>
+                  <item><p><code>deep-equal(ceiling#1, round(?, 0, "ceiling"))</code></p></item>
                   <item><p>In XQuery:</p>
                      <eg>
 declare function f($x) {$x + 1};

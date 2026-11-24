@@ -22504,7 +22504,7 @@ return system-properties()?(QName($xsl, "supports-streaming"))</eg></fos:express
           added to the static context and have no effect on any other validation episodes. A processor may cache schema
           components to reduce the cost of processing the same schema repeatedly, but this has no observable effect other than
           on performance.</p>
-          <p>It is <termref def="implementation-dependent"/> whether the <code>fn:compiled-regex-record</code>
+          <p>It is <termref def="implementation-dependent"/> whether the <code>fn:validation-result-record</code>
          instances delivered by two calls on <function>fn:xsd-validator</function> with identical arguments
          are deep-equal to each other.</p>
        </fos:notes>
